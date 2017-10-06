@@ -1,0 +1,191 @@
+#index .container {
+	margin-top: 50px;
+}
+
+/** Game selection **/
+
+.game-options{
+	display: inline-flex;
+	margin-bottom: 30px;
+}
+
+.switch-hint{
+	padding-top: 3px;
+	margin-left: 15px;
+}
+
+/** End game selection **/
+
+
+/** game **/
+
+.timer-wrapper{
+	font-size: 15px;
+}
+.timer-wrapper .seconds-5{
+	color: rgb(246, 135, 135);
+}
+.timer-wrapper .seconds-4{
+	color: rgb(243, 92, 92);
+}
+.timer-wrapper .seconds-3{
+	color: rgb(241, 64, 64);
+}
+.timer-wrapper .seconds-2{
+	color: rgb(233, 16, 16);
+}
+.timer-wrapper .seconds-1{
+	color: rgb(166, 11, 11);
+}
+
+
+.who-is{
+	font-size: 30px;
+	margin-top: 45px;
+	margin-bottom: 25px;
+	text-align: center;
+}
+
+.who-is span{
+	font-weight: bold;
+}
+
+.keyHover article {
+	border-style: solid;
+	border-radius: 8px;
+}
+
+.shortcut-demo .keyHover {
+	border-style: solid;
+	border-radius: 8px;
+}
+
+
+.skip-button button{
+	margin-left: 30px;
+	border-radius: 12px;
+}
+
+.skip-button button:hover{
+	cursor: pointer;
+	color: blue;
+}
+
+.skip-button .fa-step-forward{
+	padding-left: 5px;
+}
+
+
+/** end game **/
+
+
+/** review directive **/
+
+.no-rounds-available{
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+	padding-top: 25px;
+}
+
+.review-tab-label .fa-times-circle{
+	color: rgba(200,0,0,0.5);
+}
+
+.review-tab-label .fa-check-circle{
+	color: rgba(0,200,0,0.5);
+}
+
+.review-body {
+	padding-top: 10px;
+}
+
+/** end review directive **/
+
+
+
+/** shortcut overview **/
+
+.shortcut-demo {
+	margin-left: 20px;
+}
+
+.shortcut-demo .shortcut-number {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+/** end shortcut **/
+
+
+/** person tile - css pulled from http://wta-namegame.herokuapp.com/ and modified**/
+.person {
+	box-sizing: border-box;
+    width: 20%;
+    cursor: pointer;
+    position: relative;
+    float: left;
+    padding: 5px;
+}
+
+.person img{
+	width: 100%;
+}
+
+.person span{
+	transition: all .5s linear;
+    opacity: 1;
+    position: absolute;
+    bottom: 4px;
+    left: 5px;
+    right: 5px;
+    top: 25px;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    display: block;
+    -webkit-text-stroke: 1px black;
+}
+.stat-body .person span,.review-body .person span{
+	top: 5px;
+}
+
+.person span h2{
+	font-size: 20px;
+    padding: 0;
+    margin: 0;
+	transition: all .5s linear;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+}
+
+.incorrect-guess span{
+	background-color: rgba(200,0,0,0.5);
+}
+
+.correct-guess span{
+	background-color: rgba(0,200,0,0.5);
+}
+
+.hint-displayed span{
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.person-index{
+	text-align: center;
+}
+
+
+/** end person tile **/
+
+
+/** stats **/
+
+.stat-body .accordion-body {
+	margin-left: 25px;
+}
+
+/** end stats **/
+

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<div ng-if="rCtrl.rounds.length == 0" class="no-rounds-available">
+		No data collected. Play a few rounds!
+	</div>
+	<div ng-if="rCtrl.rounds.length > 0">
+		<md-content class="md-padding">
+		    <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect md-swipe-content md-dynamic-height="" md-border-bottom="">
+		      <md-tab ng-repeat="round in rCtrl.rounds">
+		        <md-tab-label>
+		        	<span class="review-tab-label">Round {{$index + 1}}
+		        	 <i ng-class="{'fa fa-times-circle': round.failed, 'fa fa-check-circle': !round.failed}"/>
+		        	</span>
+		    	</md-tab-label>
+		        <md-tab-body>
+		        	<div class="review-body">
+		        		<div>Game mode: {{round.gameMode.description}}</div>
+				        <div>Incorrect guesses made: {{round.incorrectGuesses}}</div>
+				        <div>Time taken: {{round.elapsedTime}}
+				        	<ng-pluralize count="round.elapsedTime" when="{'1': 'second', 'other': 'seconds'}"></ng-pluralize>
+						</div>
+
+						<div class="person-tiles-wrapper">
+							<div ng-repeat="person in round.people" ng-click="fPCtrl.select(person)" ng-class="{'correct-guess': person.correctlyGuessed, 'incorrect-guess': person.incorrectlyGuessed, 'selected': person.selected, 'hint-displayed': person.hintDisplayed}">
+								<person-tile person="person" is-review="true"></person-tile>
+							</div>
+						</div>
+					</div>
+				</md-tab-body>
+		      </md-tab>
+		    </md-tabs>
+		</md-content>
+	</div>
+</html>

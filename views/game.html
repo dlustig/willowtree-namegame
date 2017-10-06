@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<div class="timer-wrapper">
+	<div class="elapsed-time" ng-if="fPCtrl.gameMode.value != fPCtrl.gameModes.Timed.value && fPCtrl.currentRoundCounter != null">
+		Time taken: {{fPCtrl.currentRoundCounter}}
+		<ng-pluralize count="fPCtrl.currentRoundCounter" when="{'1': 'second', 'other': 'seconds'}"></ng-pluralize>
+	</div>
+
+	<div class="elapsed-time timed-round-counter" 
+	ng-if="fPCtrl.gameMode.value == fPCtrl.gameModes.Timed.value && fPCtrl.timedCounter != null">
+		Time remaining: {{fPCtrl.timedCounter}}
+		<ng-pluralize count="fPCtrl.timedCounter" when="{'1': 'second', 'other': 'seconds'}"></ng-pluralize>
+	</div>
+
+	<div class="next-round-timer" ng-if="fPCtrl.nextRoundCounter != null">
+		next round starts in {{fPCtrl.nextRoundCounter}} 
+		<ng-pluralize count="fPCtrl.nextRoundCounter" when="{'1': 'second', 'other': 'seconds'}"></ng-pluralize>
+		<span class="skip-button"><button ng-click="fPCtrl.skipToNextRound()">Skip to the next round<i class="fa fa-step-forward" /></button></span>
+	</div>
+</div>
+
+<div class="who-is">
+	Who is <span>{{fPCtrl.currentRoundCorrectPerson.firstName}} {{fPCtrl.currentRoundCorrectPerson.lastName}}</span>
+</div>
+
+<div class="person-tiles-wrapper">
+	<div ng-repeat="person in fPCtrl.currentRound" ng-click="fPCtrl.select(person)" ng-class="{'correct-guess': person.correctlyGuessed, 'incorrect-guess': person.incorrectlyGuessed, 'selected': person.selected, 'hint-displayed': person.hintDisplayed, 'keyHover': $index == fPCtrl.hoverIndex}" ng-mouseenter="fPCtrl.hoverIndex = $index">
+		<person-tile person="person"></person-tile>
+	</div>
+</div>
+	
+</html>

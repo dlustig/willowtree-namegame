@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<div ng-if="sCtrl.rounds.length == 0" class="no-rounds-available">
+		No data collected. Play a few rounds!
+	</div>
+	<div ng-if="sCtrl.rounds.length > 0" class="stat-body">
+		<div id="accordion" ng-if="sCtrl.failStats != null && sCtrl.failStats.total > 0">
+		    <md-button class="md-raised md-primary" ng-init="selectFailAccordion = true" ng-click="selectFailAccordion = !selectFailAccordion">
+		        Failed rounds
+		        <i ng-class="{'fa fa-chevron-right': !selectFailAccordion,'fa fa-chevron-down': selectFailAccordion }"/>
+		    </md-button>
+		    <div ng-accordion-body ng-show="selectFailAccordion" class="accordion-body">
+		        <div ng-cloak>
+		            <md-content>
+		                <div class="failed-rounds">
+							<div>
+								Total failed rounds: {{sCtrl.failStats.total}}
+								<ul>
+									<li>Free play: {{sCtrl.failStats.totalFreeplay}}</li>
+									<li>Timed: {{sCtrl.failStats.totalTimed}}</li>
+									<li>Mat(t): {{sCtrl.failStats.totalMat}}</li>
+								</ul>
+							</div>
+							<div>
+								Average time taken: {{sCtrl.failStats.averageTime}} seconds
+							</div>
+							<div>
+								Hints given: {{sCtrl.failStats.hintsApplied}}
+							</div>
+							<div>
+								<div>
+									Top {{sCtrl.failStats.rounds.length > 5 ? '5': sCtrl.failStats.rounds.length}} mismatched
+									<ng-pluralize count="sCtrl.failStats.rounds.length" when="{'1': 'person:', 'other': 'people:'}"></ng-pluralize>
+								</div>
+								<div ng-repeat="round in sCtrl.failStats.rounds | orderBy: '-round.attempts' | limitTo: '5'">
+									<div>
+										<person-tile person="round.person" is-stat="true" attempts="round.attempts"></person-tile>
+									</div>
+								</div>
+							</div>
+						</div>	
+		            </md-content>
+		        </div>
+		    </div>
+		</div>
+		<div id="accordion" ng-if="sCtrl.wonStats != null && sCtrl.wonStats.total > 0">
+		    <md-button class="md-raised md-primary" ng-init="selectFailAccordion = false" ng-click="selectWonAccordion = !selectWonAccordion">
+		        Won rounds
+		    	<i ng-class="{'fa fa-chevron-right': !selectWonAccordion,'fa fa-chevron-down': selectWonAccordion }"/>
+		    </md-button>
+		    <div ng-accordion-body ng-show="selectWonAccordion" class="accordion-body">
+		        <div ng-cloak>
+		            <md-content>
+		                <div class="won-rounds">
+							<div>
+								Total won rounds: {{sCtrl.wonStats.total}}
+								<ul>
+									<li>Free play: {{sCtrl.wonStats.totalFreeplay}}</li>
+									<li>Timed: {{sCtrl.wonStats.totalTimed}}</li>
+									<li>Mat(t): {{sCtrl.wonStats.totalMat}}</li>
+								</ul>
+							</div>
+							<div>
+								Average time taken: {{sCtrl.wonStats.averageTime}} seconds
+							</div>
+							<div>
+								Fastest/slowest time: {{sCtrl.wonStats.fastestTime}}/{{sCtrl.wonStats.slowestTime}} seconds
+							</div>
+							<div>
+								Hints given: {{sCtrl.wonStats.hintsApplied}}
+							</div>
+						</div>		
+		            </md-content>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</html>

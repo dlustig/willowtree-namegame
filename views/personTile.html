@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<div>
+	<article class="person">
+ 		<div ng-if="!pTCtrl.isReview && !pTCtrl.isStat" class="person-index">{{$index + 1}}</div>
+ 		<div ng-if="pTCtrl.isStat" class="person-index">Incorrect attempts: {{pTCtrl.attempts}}</div>
+		<img src="{{pTCtrl.person.headshot.url}}"/>
+		<span ng-if="pTCtrl.person.selected || pTCtrl.isReview || pTCtrl.isStat">
+			<h3 class="name">{{pTCtrl.person.firstName}} {{pTCtrl.person.lastName}}</h2>
+			<h2 class="title">{{pTCtrl.person.jobTitle}}</h2>
+		</span>
+	</article>
+</div>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<div class="overview-body">
+		<h2>Welcome to the WillowTree Namegame!</h2>
+		<div>The game is simple - match the name to the correct face.<p>
+		<ul>
+			<li>Freeplay - take it easy, have fun!</li>
+			<li>Timed - you have 8 seconds to make the match.</li>
+			<li>Mat(t) - There's an unnatural amount of people at WillowTree whose name is or starts with 'Mat'. This round is for them.</li>
+		</ul>
+
+		<div class="overview-shortcuts">
+			<div>Shortcuts: In addition to using the mouse, a mixture of vim shortcuts, arrow keys, and numbers work as well.</div>
+			<ul>
+				<li>Left: h, j, <i class="fa fa-arrow-left"/>, <i class="fa fa-arrow-down"/></li>
+				<li>right: l, k, <i class="fa fa-arrow-right"/>, <i class="fa fa-arrow-up"/></li>
+				<li>enter: enter-key</li>
+				<li>move to first item: 0</li> 
+				<li>numbers: 1, 2, 3, 4, 5</li>
+			</ul>
+		</div>
+		<div class="shortcuts">
+			<div>Feel free to try it out!{{oCtrl.hoverIndex}}</div>
+			<div class="shortcut-demo">
+				<span ng-repeat="number in oCtrl.numArray" class="shortcut-number" ng-class="{'keyHover': $index == oCtrl.hoverIndex}" ng-mouseenter="oCtrl.hoverIndex = $index">
+					{{number}}
+				</span>
+			</div>
+		</div>
+
+	</div>
+</html>
