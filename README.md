@@ -1,29 +1,34 @@
-# The Namegame
+# WillowTree Apps Namegame
 
-Leading scientists have proven, via science, that learning your coworkers names while starting a new job is useful. Your test project is to make it happen! We have a simple version hosted at [namegame.willowtreemobile.com](http://namegame.willowtreemobile.com/) which you can test. The api is located at [https://willowtreeapps.com/api/v1.0/profiles/](https://willowtreeapps.com/api/v1.0/profiles/).
+Welcome to my version of WillowTree's Namegame!
 
-## Option 1
+This was primarily written in AngularJS, with heavy usage of NgMaterial.
 
-Present the user with five faces and ask them to identify the listed name. This is essentially what is working already. To spruce things up, implement a few features of your choice.
+## Features
 
-1. Team mode. The api returns people who used to work here too. Current team members have titles and former team members don't.
-2. Stat tracking. How many correct / incorrect attempts did the user make? How long does it take on average for a person to identify the subject?
-3. Reverse mode. Show five names with one picture.
-4. Keyboard shortcuts. Power users love keyboard shortcuts, maybe add numbers for faces for mouse free fun. Bonus points for Vim shortcuts. Negative points for Emacs**.
-5. Local Scoring. The server might not accept scores, but you can always track it locally. Make metrics of your own and have a leader board!
-6. Mat(t) Mode. Roughly 90% of our co-workers are named Mat(t), so add a challenge mode where you only present the users with A Mat(t).
-7. Hint mode. As people wait, faces disappear until only the correct one is left.
-8. Insert your own idea here!
+In brief - The goal of the game is to match the name to the correct face. A few additional tweaks were made to make it more interesting.
+
+1. 3 game modes - Free play, Timed, Mat(t) (only display faces & names that start with Mat).
+2. Hints - Need help? flip the hint switch and let the game make it easier on ya.
+3. Keyboard shortcuts - arrow keys, numbers, enter, and vim shortcuts (l,j,h,k,0) all work for your face matching needs.
+4. Overview tab - details explaining the game.
+5. Review tab - Frustrated with the last few rounds? Review it!
+6. Stats tab - Lets see just how great(terrible) you are at remembering your co-workers.
 
 
-## Option 2
+## Frustrations
 
-Feel like taking the path less trodden? Do you know a better way to learn faces than to present five options and a name? Come up with your own memory game!
+Unfortunately, this project was timed and to avoid going severely over the limit, several features were scrapped, a few UX bugs were introduced(what??? no....), and html was left in a rougher state than I like. However, I'm happy with the outcome given the parameters and the time allotted. There are several(many) things I would change given the opportunity.
 
-## Conclusion
 
-We have provided you with a few files to get you started. Feel free to discard everything and start from scratch. You may use any framework or library you like.
+## Lets start this rocket
 
-If you need a simple http server, we recommend [http-server](https://www.npmjs.org/package/http-server).
+1. download & install [node.js](https://www.nestrealty.com/charlottesville/listings/3300_middle_mountain_rd/567838.html)
+2. install http-server
+    npm install http-server -g
+3. download or check out the [game](https://github.com/dlustig/willowtree-namegame.git)
+4. in terminal or cmd 
+    http-server "[path to game]"
+5. navigate to the [server](http://localhost:8080)
 
-** The Web Apps Team Lead uses Emacs. So, like, use your own discretion here.
+Enjoy! and don't judge too heavily :)
