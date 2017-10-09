@@ -18,7 +18,7 @@ In brief - The goal of the game is to match the name to the correct face. A few 
 
 ## Frustrations
 
-Unfortunately, this project was timed and to avoid going severely over the limit, several features were scrapped, a few UX bugs were introduced(what??? no....), and html was left in a rougher state than I like. However, I'm happy with the outcome given the parameters and the time allotted. There are several(many) things I would change given the opportunity.
+Unfortunately, this project was timed and to avoid going severely over the limit, several features were scrapped, a few UX shortcomings were not attended to, and html was left in a rougher state than I like. However, I'm happy with the outcome given the parameters and the time allotted. There are several(many) things I would change given the opportunity.
 
 
 ## Lets start this rocket
