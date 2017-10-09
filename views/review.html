@@ -5,7 +5,7 @@
 	</div>
 	<div ng-if="rCtrl.rounds.length > 0">
 		<md-content class="md-padding">
-		    <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect md-swipe-content md-dynamic-height="" md-border-bottom="">
+		    <md-tabs md-selected="rCtrl.selectedIndex" md-border-bottom md-autoselect md-swipe-content md-dynamic-height="" md-border-bottom="">
 		      <md-tab ng-repeat="round in rCtrl.rounds">
 		        <md-tab-label>
 		        	<span class="review-tab-label">Round {{$index + 1}}

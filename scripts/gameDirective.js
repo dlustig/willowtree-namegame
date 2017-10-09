@@ -140,7 +140,7 @@ window.app.directive('gameDirective', function() {
         self.currentRoundCorrectPerson = null;
       }
 
-      //Remove the correctly guessed person from the main person array
+      //Remove the correctly guessed person from the main person array - only is called if round is a 'win'
       function removeCorrectGuess(){
         self.people = self.people.filter(function(person){
           return person.id != self.currentRoundCorrectPerson.id;
@@ -195,7 +195,8 @@ window.app.directive('gameDirective', function() {
           $timeout.cancel(currentRoundTimer);   
       }
 
-      //display a hint ever 3000 seconds
+
+      //display a hint every 3 seconds
       var hintTimer = null;
       function startHintTimer(){
         if (hintTimer != null)
@@ -208,6 +209,7 @@ window.app.directive('gameDirective', function() {
         if (hintTimer)
           clearInterval(hintTimer);
       }
+
 
       //Counter starts at 10, returns a promise when it hits 0
       var nextRoundTimer = null;
@@ -237,6 +239,7 @@ window.app.directive('gameDirective', function() {
           $timeout.cancel(nextRoundTimer);   
       }
 
+
       var timedRoundTimer = null;
       function startTimedRoundTimer(){
         self.timedCounter = 10;
@@ -261,6 +264,7 @@ window.app.directive('gameDirective', function() {
         if (timedRoundTimer)
           $timeout.cancel(timedRoundTimer);   
       }
+
       //#endregion
 
 
@@ -349,11 +353,13 @@ window.app.directive('gameDirective', function() {
       //#endregion
 
 
+      //user selected a new game mode
       self.changeGameMode = function(){
         stopAllTimers();
         initialize(self.gameMode);
       }
 
+      //user flipped show hint boolean
       self.changeShowHint = function(){
         if (self.showHint)
           startHintTimer();
@@ -368,14 +374,15 @@ window.app.directive('gameDirective', function() {
         stopCurrentRoundTimer();
       }
 
-      initialize();
-
-
-
+      //directive scope has been destroyed by navigating to a different tab. Remove active timers and unbind key events
       $scope.$on('$destroy', function () {
         stopAllTimers();
         unbindKeyup();
       });
+
+
+
+      initialize();
 
     }],
   };

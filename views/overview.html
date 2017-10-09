@@ -2,7 +2,7 @@
 <html>
 	<div class="overview-body">
 		<h2>Welcome to the WillowTree Namegame!</h2>
-		<div>The game is simple - match the name to the correct face.<p>
+		<p>The game is simple - match the name to the correct face.<p>
 		<ul>
 			<li>Freeplay - take it easy, have fun!</li>
 			<li>Timed - you have 8 seconds to make the match.</li>
@@ -19,14 +19,5 @@
 				<li>numbers: 1, 2, 3, 4, 5</li>
 			</ul>
 		</div>
-		<div class="shortcuts">
-			<div>Feel free to try it out!{{oCtrl.hoverIndex}}</div>
-			<div class="person-tiles-wrapper">
-				<div ng-repeat="person in oCtrl.shortcutDemoArray" ng-class="{'keyHover': $index == oCtrl.hoverIndex}" ng-mouseenter="oCtrl.hoverIndex = $index">
-					<person-tile person="person"></person-tile>
-				</div>
-			</div>
-		</div>
-
 	</div>
 </html>

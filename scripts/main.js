@@ -8,6 +8,9 @@ app.controller('controller', function(dataService, enumerations) {
 	var loadData = dataService.loadData();
 	loadData.then(function(){
 		self.dataLoaded = true;
+
+		//auto select first tab
+		self.selectedIndex = 0;
 	});
 });
 

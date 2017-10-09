@@ -60,8 +60,6 @@ window.app.directive('statDirective', function(reviewService, dataService, enume
           //remove the items from failedRoundsPersonIds that were just iterated over. Will eventually cause while loop to end
           failedRoundsPersonIds = failedRoundsPersonIds.slice(count);
         }
-
-        
         
         self.failStats = {
           total: failedRounds.length,
@@ -109,6 +107,8 @@ window.app.directive('statDirective', function(reviewService, dataService, enume
       }
 
       //#region quicksort
+
+      //At this point the quickSort method is unnecessary, however if the returned users array contained several thousand items instead of 100 the quick sort would be significantly faster than built in angular filtering
 
       //generic quick sort function - pulled from - http://khan4019.github.io/front-end-Interview-Questions/sort.html#quickSort
       function quickSort(arr, left, right){
