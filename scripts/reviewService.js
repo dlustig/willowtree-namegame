@@ -13,7 +13,6 @@ window.app.service('reviewService', function() {
       gameMode: gameMode
     };
     rounds.push(obj);
-    console.log(rounds)
   }
 
   self.getRounds = function(){

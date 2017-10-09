@@ -9,10 +9,6 @@ app.controller('controller', function(dataService, enumerations) {
 	loadData.then(function(){
 		self.dataLoaded = true;
 	});
-
-	self.gameModes = enumerations.gameModes;
-
-	self.gameMode = self.gameModes.FreePlay;
 });
 
 

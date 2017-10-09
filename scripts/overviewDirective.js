@@ -1,20 +1,25 @@
-
 window.app.directive('overviewDirective', function() {
   return {
-    scope: {},
     templateUrl: '/views/overview.html',
+    restrict: 'AE',
+    scope: true,
     controllerAs: 'oCtrl',
-    controller: function($rootScope, $scope) {
+    controller: ['$scope', 'dataService',
+    function($scope, dataService) {
+
       var self = this;
 
-      self.hoverIndex = 2;
-      self.numArray = [1,2,3,4,5];
+      function initialize(){
+        self.hoverIndex = 3;
+        self.shortcutDemoArray = angular.copy(dataService.getActiveWotPeopleWithImage()).slice(0,5);
+        self.test = 1
+        bindKeyup();
+      }
 
       //bind keyup function to document keyboard events
       function bindKeyup() {
           angular.element(document).keyup(keyUp);
       }
-      bindKeyup();
 
       //unbind keyup function to document keyboard events
       function unbindKeyup() {
@@ -61,16 +66,19 @@ window.app.directive('overviewDirective', function() {
 
       //move focus right
       function moveHoverIndexRight(){
-        self.hoverIndex = self.hoverIndex == self.numArray.length - 1 ? 0 : self.hoverIndex + 1;
+        self.hoverIndex = self.hoverIndex == self.shortcutDemoArray.length - 1 ? 0 : self.hoverIndex + 1;
         console.log(self.hoverIndex)
+        self.test++;
       }
 
       //move focus left
       function moveHoverIndexLeft(){
-        self.hoverIndex = self.hoverIndex == 0 ? self.numArray.length - 1 : self.hoverIndex - 1;
+        self.hoverIndex = self.hoverIndex == 0 ? self.shortcutDemoArray.length - 1 : self.hoverIndex - 1;
         console.log(self.hoverIndex)
       }
 
-    },
+      initialize();
+
+    }],
   };
 });

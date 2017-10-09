@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 <html>
+<div class="game-options">
+	<md-input-container>
+	  <md-select ng-model="fPCtrl.gameMode" ng-change="fPCtrl.changeGameMode()">
+	    <md-option ng-repeat="mode in fPCtrl.gameModes" ng-value="mode">{{mode.description}}</md-option>
+	  </md-select>
+	</md-input-container>
+
+	<span class="switch-hint"><md-switch ng-model="fPCtrl.showHint" ng-change="fPCtrl.changeShowHint()" md-no-ink>Hint?</md-switch></span>
+</div>
+
 <div class="timer-wrapper">
 	<div class="elapsed-time" ng-if="fPCtrl.gameMode.value != fPCtrl.gameModes.Timed.value && fPCtrl.currentRoundCounter != null">
 		Time taken: {{fPCtrl.currentRoundCounter}}

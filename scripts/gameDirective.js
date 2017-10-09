@@ -1,20 +1,9 @@
-//Free play directive
-//display 5 random tiles at a time, no timer applied
-//on initial correct choice, remove tile from active array
-//on incorrect choice, increment fail on tile, by number of tiles chosen before correct option. will be retried again later
-//to win, guess all names correctly on first try
-
-
 window.app.directive('gameDirective', function() {
   return {
     templateUrl: '/views/game.html',
     restrict: 'AE',
     scope: true,
     controllerAs: 'fPCtrl',
-    bindToController:{
-      showHint: "=",
-      gameMode: "=",
-    },
     controller: ['$rootScope', '$scope', 'enumerations','dataService', 'reviewService', '$timeout', '$q',
     function($rootScope, $scope, enumerations,dataService, reviewService, $timeout, $q) {
 
@@ -24,10 +13,13 @@ window.app.directive('gameDirective', function() {
       self.currentRoundCounter = null;
       self.nextRoundCounter = null;
       self.timedCounter = null;
+      self.gameMode = enumerations.gameModes.FreePlay;
+      self.gameModes = enumerations.gameModes;
 
-      function initialize(gameMode){
+
+      function initialize(){
         //copy data from dataService. We don't want to accidentally set values on our primary array
-        switch(gameMode.value){
+        switch(self.gameMode.value){
           case enumerations.gameModes.FreePlay.value:
           case enumerations.gameModes.Timed.value:
             self.people = angular.copy(dataService.getActiveWotPeopleWithImage());
@@ -37,10 +29,6 @@ window.app.directive('gameDirective', function() {
             break;
         }
 
-        self.gameModes = enumerations.gameModes;
-
-        console.log(self.people);
-
         //bind key events
         bindKeyup();
 
@@ -48,25 +36,28 @@ window.app.directive('gameDirective', function() {
         loadRound();
       }
 
-      //randomize array
-      //take first 5 people
-      //randomly choose a correct person.
-      //start current round counter
       function loadRound(){
 
+        //randomize array
         randomizePeople();
+
         self.currentRound = self.people.slice(0,5);
+
+        //randomly choose a correct person.
         self.currentRoundCorrectPerson = self.currentRound[Math.floor(Math.random()*self.currentRound.length)];
 
-        startCurrentRoundCounter();
+        //start current round counter
+        startCurrentRoundTimer();
 
+        //if timed round - start timer
         if(self.gameMode.value == enumerations.gameModes.Timed.value)
           startTimedRoundTimer();
 
+        //if hint selection is true - start hint timer
         if (self.showHint)
           startHintTimer();
 
-        //reset the initial pre-select item
+        //reset the initial pre-selected hover item
         self.hoverIndex = 0;
       }
 
@@ -77,14 +68,13 @@ window.app.directive('gameDirective', function() {
 
       
       //user click event
-      //set selected value
-      //if the person hasn't been selected already in this current round - match id to the correct id
-      //set guess values on person object - used in ng-class/ng-if to show correct/incorrect data
       self.select = function(person){
         if (!person.selected){
         
           person.selected = true;
-
+      
+          //if the person hasn't been selected already in this current round - match id to the correct id
+          //set guess values on person object - used in ng-class/ng-if to show correct/incorrect data
           if (person.id == self.currentRoundCorrectPerson.id){
             correctGuess(person);
           }else{
@@ -93,41 +83,48 @@ window.app.directive('gameDirective', function() {
         }
       }
 
+      //user made the correct guess, doesn't mean the round was a win, just means the rounds is over
       function correctGuess(person){
         person.correctlyGuessed = true;
 
-        stopCurrentRoundCounter();
+        //stop applicable timers - currentRound/Timed/hint timers
+
+        stopCurrentRoundTimer();
 
         if(self.gameMode.value == enumerations.gameModes.Timed.value)
           stopTimedRoundTimer();
+
+        if (self.showHint)
+          stopHintTimer();
 
         loadNextRound();
       }
 
       function incorrectGuess(person){
         person.incorrectlyGuessed = true;
-        if (!!person.incorrectlyGuessedTimes)
-          person.incorrectlyGuessedTimes = 0;
-
-        person.incorrectlyGuessedTimes++;
       }
 
-      //on round completion/correct guess - start the next rounds counter.
-      //on counter completion (promise) - reset current round's values and load the next round.
+      //on round completion/correct guess - start the next rounds' counter.
       function loadNextRound(){
-        var incorrectGuesses = self.currentRound.filter(function(person){return person.incorrectlyGuessed;}).length;
-        reviewService.addRound(self.currentRoundCorrectPerson, angular.copy(self.currentRound), incorrectGuesses, self.currentRoundCounter, self.gameMode);
+        //calculate number of incorrect guesses during current round
+        var incorrectGuessesCount = self.currentRound.filter(function(person){ return person.incorrectlyGuessed || person.hintDisplayed;}).length;
+
+        //add round to review service, also used for stats
+        reviewService.addRound(self.currentRoundCorrectPerson, angular.copy(self.currentRound), incorrectGuessesCount, self.currentRoundCounter, self.gameMode);
 
         var counterPromise = startNextRoundCounter();
         counterPromise.then(function(){
-          resetSelectedValues();
-          loadRound();
-          self.nextRoundCounter = null;
-        });
 
-        //if the round was a 'win' then remove the correct person from the array
-        if (incorrectGuesses.length == 0)
-          removeCorrectGuess();
+          //if the round was a 'win' (no incorrect guesses and didn't wait for hint to display 3 incorrect users) then remove the correct person from the array
+          if (incorrectGuessesCount == 0)
+            removeCorrectGuess();
+
+          //reset current rounds selected (guessed - correct/incorrect) values
+          resetSelectedValues();
+
+          //start next round
+          loadRound();
+        });
       }
 
       //reset the current round's persons to their initial value
@@ -139,7 +136,8 @@ window.app.directive('gameDirective', function() {
           person.incorrectlyGuessed = false;
           person.hintDisplayed = false;
         });
-          self.currentRoundCorrectPerson = null;
+        
+        self.currentRoundCorrectPerson = null;
       }
 
       //Remove the correctly guessed person from the main person array
@@ -157,7 +155,6 @@ window.app.directive('gameDirective', function() {
       //round failed either because the hint was waited upon, or round timed out.
       //loop through all incorrect people and 'select' them, before 'selecting' the correct person and ending the round
       function setFailedRound(){
-        console.log('setFailedRound')
         var correctPerson = null;
         angular.forEach(self.currentRound, function(person){
           if (!person.selected){
@@ -177,7 +174,7 @@ window.app.directive('gameDirective', function() {
       //#region counter
 
       var currentRoundTimer = null;
-      function startCurrentRoundCounter(){
+      function startCurrentRoundTimer(){
         self.currentRoundCounter = 0;
         var incrementCounter = function() {
             self.currentRoundCounter++;
@@ -193,7 +190,7 @@ window.app.directive('gameDirective', function() {
       }
 
       //stop the currentRound timeout
-      function stopCurrentRoundCounter(){
+      function stopCurrentRoundTimer(){
         if(currentRoundTimer)
           $timeout.cancel(currentRoundTimer);   
       }
@@ -212,7 +209,7 @@ window.app.directive('gameDirective', function() {
           clearInterval(hintTimer);
       }
 
-      //Counter starts at 5, returns a promise when it hits 0
+      //Counter starts at 10, returns a promise when it hits 0
       var nextRoundTimer = null;
       function startNextRoundCounter(){
         self.nextRoundCounter = 10;
@@ -226,6 +223,7 @@ window.app.directive('gameDirective', function() {
               nextRoundTimer = $timeout(decrimentCounter, 1000);
             else{
               $timeout.cancel(nextRoundTimer);   
+              self.nextRoundCounter = null;
               deferred.resolve();
             }
         };
@@ -266,7 +264,7 @@ window.app.directive('gameDirective', function() {
       //#endregion
 
 
-      //every few seconds (set by user) display one of the incorrect people who has not been selected yet.
+      //every few seconds display one of the incorrect people who has not been selected yet.
       function displayHint(){
         //get all the users who have not been selected in the current round, and are not the correct user
         var unselectedIncorrectPeople = self.currentRound.filter(
@@ -278,25 +276,30 @@ window.app.directive('gameDirective', function() {
 
         if (unselectedIncorrectPeople.length > 0){
         //choose one randomly (or only) and display hint
-        var personToHint = unselectedIncorrectPeople.length == 0 ?
-         unselectedIncorrectPeople.first() : unselectedIncorrectPeople[Math.floor(Math.random()*unselectedIncorrectPeople.length)];
-        if (!!personToHint)
-        {
-          personToHint.selected = true;
-          personToHint.hintDisplayed = true;
+          var personToHint = unselectedIncorrectPeople.length == 0 ?
+           unselectedIncorrectPeople.first() : unselectedIncorrectPeople[Math.floor(Math.random()*unselectedIncorrectPeople.length)];
+          if (!!personToHint)
+          {
+            personToHint.selected = true;
+            personToHint.hintDisplayed = true;
+          }
         }
-      }
+        else{
+          //user waited until the hint displayed the correct choice
+          setFailedRound();
+        }
       }
 
 
 
       //#region keypress listener
 
-
+      //bind keyboard keyUp event to the keyUp funtion
       function bindKeyup() {
         angular.element(document).keyup(keyUp);
       }
 
+      //unbind keyUp keyboard event from DOM
       function unbindKeyup() {
         angular.element(document).unbind('keyup', keyUp);
       }
@@ -346,33 +349,32 @@ window.app.directive('gameDirective', function() {
       //#endregion
 
 
-      //#region watchers
+      self.changeGameMode = function(){
+        stopAllTimers();
+        initialize(self.gameMode);
+      }
 
-      //The directive is created before the bound parameters are initialized. Need a watch on the gameMode variable to kick off data initialization
-      var gameModeWatcher = $scope.$watch(function () { return self.gameMode; }, function (newVal, oldVal) {
-        if (newVal != null && !!newVal){
-          initialize(newVal);
-        }
-      });
-
-
-      var hintWatcher = $scope.$watch(function () { return self.showHint; }, function (newVal, oldVal) {
-        if (newVal != null && !!newVal){
+      self.changeShowHint = function(){
+        if (self.showHint)
           startHintTimer();
-        }else{
-          if (hintTimer != null)
-            clearInterval(hintTimer);
-        }
-      });
+        else
+          stopHintTimer();
+      }
 
-      //#endregion
+      function stopAllTimers(){
+        stopTimedRoundTimer();
+        stopNextRoundTimer();
+        stopHintTimer();
+        stopCurrentRoundTimer();
+      }
+
+      initialize();
+
+
 
       $scope.$on('$destroy', function () {
-          unbindKeyup();
-          stopTimedRoundTimer();
-          stopNextRoundTimer();
-          stopHintTimer();
-          stopCurrentRoundCounter();
+        stopAllTimers();
+        unbindKeyup();
       });
 
     }],

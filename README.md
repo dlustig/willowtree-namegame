@@ -25,10 +25,14 @@ Unfortunately, this project was timed and to avoid going severely over the limit
 
 1. download & install [node.js](https://www.nestrealty.com/charlottesville/listings/3300_middle_mountain_rd/567838.html)
 2. install http-server
+
     npm install http-server -g
+
 3. download or check out the [game](https://github.com/dlustig/willowtree-namegame.git)
 4. in terminal or cmd 
+
     http-server "[path to game]"
+    
 5. navigate to the [server](http://localhost:8080)
 
 Enjoy! and don't judge too heavily :)

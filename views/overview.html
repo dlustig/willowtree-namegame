@@ -21,10 +21,10 @@
 		</div>
 		<div class="shortcuts">
 			<div>Feel free to try it out!{{oCtrl.hoverIndex}}</div>
-			<div class="shortcut-demo">
-				<span ng-repeat="number in oCtrl.numArray" class="shortcut-number" ng-class="{'keyHover': $index == oCtrl.hoverIndex}" ng-mouseenter="oCtrl.hoverIndex = $index">
-					{{number}}
-				</span>
+			<div class="person-tiles-wrapper">
+				<div ng-repeat="person in oCtrl.shortcutDemoArray" ng-class="{'keyHover': $index == oCtrl.hoverIndex}" ng-mouseenter="oCtrl.hoverIndex = $index">
+					<person-tile person="person"></person-tile>
+				</div>
 			</div>
 		</div>
 

@@ -14,7 +14,6 @@ window.app.directive('statDirective', function(reviewService, dataService, enume
         calculateFailedRoundsStats();
         calculateWonRoundsStats();
 
-        console.log(self.rounds);
       }
 
       function calculateFailedRoundsStats(){
@@ -61,7 +60,9 @@ window.app.directive('statDirective', function(reviewService, dataService, enume
           //remove the items from failedRoundsPersonIds that were just iterated over. Will eventually cause while loop to end
           failedRoundsPersonIds = failedRoundsPersonIds.slice(count);
         }
-        console.log(failedRounds.map(function(round){return round.people; }).map(function(person){return person.hintDisplayed; }).filter(function(x){ return x != null; }))
+
+        
+        
         self.failStats = {
           total: failedRounds.length,
           totalFreeplay: failedRounds.filter(function(round){ return round.gameMode == enumerations.gameModes.FreePlay; }).length, //filter to only free play rounds
@@ -71,7 +72,7 @@ window.app.directive('statDirective', function(reviewService, dataService, enume
           fastestTime: times[0], //first item in array is fastest after sorting
           slowestTime: times[times.length - 1], //last item in array is slowest after sorting
           rounds: calculatedFailedRounds, //condensed rounds cotaining extended stats (attempts, person)
-          hintsApplied: failedRounds.map(function(round){return round.people; }).map(function(person){return person.hintDisplayed; }).filter(function(x){ return x != null; }).length //map rounds to people, map people to hint displayed, filter final array to only include non-null objects
+          hintsApplied: countHints(failedRounds)
         };
       }
 
@@ -93,9 +94,18 @@ window.app.directive('statDirective', function(reviewService, dataService, enume
           averageTime: times.length > 0 ? (times.reduce(function(a,b){ return a + b; }) / times.length).toFixed(2) : 0, //calculate average of all times and then round to 2nd decimal
           fastestTime: times[0], //first item in array is fastest after sorting
           slowestTime: times[times.length - 1], //last item in array is slowest after sorting
-          hintsApplied: wonRounds.map(function(round){return round.people; }).map(function(person){return person.hintDisplayed; }).filter(function(x){ return x != null; }).length //map rounds to people, map people to hint displayed, filter final array to only include non-null objects
+          hintsApplied: countHints(wonRounds)
         };
+      }
 
+      function countHints(rounds){
+        var hintCount = 0;
+        for (var x = 0; x < rounds.length; x++){
+          var people = rounds[x].people;
+          hintCount += people.filter(function(person){ return person.hintDisplayed; }).length;
+        }
+
+        return hintCount;
       }
 
       //#region quicksort

@@ -15,7 +15,6 @@ window.app.directive('reviewDirective', function(reviewService) {
 
       function initialize(){
         self.rounds = reviewService.getRounds();
-        console.log(self.rounds);
       }
 
 
