@@ -328,6 +328,7 @@ window.app.directive('gameDirective', function() {
             break;
           case 48: //0 move to first element
             self.hoverIndex = 0;
+            forceDigestCycle();
             break;
           case 49: //1
           case 50: //2
@@ -335,6 +336,7 @@ window.app.directive('gameDirective', function() {
           case 52: //4
           case 53: //5
             self.hoverIndex = keycode - 49;
+            forceDigestCycle();
             self.select(self.currentRound[self.hoverIndex]);
             break;
           default:
@@ -344,10 +346,18 @@ window.app.directive('gameDirective', function() {
 
       function moveHoverIndexRight(){
         self.hoverIndex = self.hoverIndex == self.currentRound.length - 1 ? 0 : self.hoverIndex + 1;
+        forceDigestCycle();
       }
 
       function moveHoverIndexLeft(){
         self.hoverIndex = self.hoverIndex == 0 ? self.currentRound.length - 1 : self.hoverIndex - 1;
+        forceDigestCycle();
+      }
+
+      //There is a noticeable lag when the focus changes programatically while the normal digest loop functions
+      //forcing a new digest cycle fixes that lag
+      function forceDigestCycle(){
+        $scope.$apply();
       }
 
       //#endregion
